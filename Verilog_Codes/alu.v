@@ -38,6 +38,9 @@ module alu (a_i,b_i,op_i,res_o);
         else if (op_i==4'b1001) begin
             res_o = a_i & b_i; //and
         end
+        else if (op_i==4'b1111) begin
+            res_o = b_i; //for lui 
+        end
         else begin
             res_o = 0;
         end

@@ -17,12 +17,14 @@ module microprocessor_tb();
     initial begin
         clk = 0;
         rst = 1;
+        enable = 0;
         #5;
         rst=0;
         enable = 0;
         #10;
 
         rst = 1;
+        #120;
         #40;
 
         $finish;       

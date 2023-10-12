@@ -7,15 +7,18 @@ module control_decoder (
     input wire store,
     input wire branch,
     input wire jal,
+    input wire jalr,
+    input wire lui,
+    input wire auipc,
 
     output reg Load,
     output reg Store,
-    output reg mem_to_reg,
+    output reg [1:0] mem_to_reg,
     output reg reg_write,
     output reg mem_en,
     output reg operand_b,
     output reg operand_a,
-    output reg [1:0]imm_sel,
+    output reg [2:0]imm_sel,
     output reg Branch,
     output reg next_sel,
     output reg [3:0]alu_control
@@ -25,9 +28,9 @@ always @(*) begin
     //reg write signal for register file
     reg_write = r_type | i_type | load | jal;
     //operand a select for first input of alu
-    operand_a = branch | jal ;
+    operand_a = branch | jal | auipc;
     //operand b signal for second input of alu
-    operand_b = i_type | load | store | branch | jal;
+    operand_b = i_type | load | store | branch | jal | jalr | lui | auipc;
     //load
     Load = load;
     //store
@@ -37,9 +40,12 @@ always @(*) begin
     //branch
     Branch =  branch;
     //selection for next address if any jump instrucion run
-    next_sel =  branch | jal;
+    next_sel =  branch | jal | jalr ;
+    //mem enable
+    mem_en = store;
 
     if(r_type)begin //rtype
+        mem_to_reg = 2'b00;
         if(fun3==3'b000 & fun7==0)begin
             alu_control = 4'b0000;
         end
@@ -72,7 +78,8 @@ always @(*) begin
         end
     end
     else if (i_type)begin //itype
-        imm_sel = 2'b01; //i_type selection
+        imm_sel = 3'b000; //i_type selection
+        mem_to_reg = 2'b00;
         if(fun3==3'b000 & fun7==0)begin
             alu_control = 4'b0000;
         end
@@ -102,8 +109,8 @@ always @(*) begin
         end
     end
     else if (store) begin //store
-       imm_sel = 2'b00; //store selection
-        mem_en = 1;
+        imm_sel = 3'b001; //store selection
+        mem_to_reg = 2'b00;
         if (fun3==3'b000)begin //sb
             alu_control = 4'b0000;
             //signal = 2'b00;
@@ -118,7 +125,8 @@ always @(*) begin
         end
     end
     else if (load) begin
-       imm_sel = 2'b01; //i_type selection
+        imm_sel = 3'b000; //i_type selection
+        mem_to_reg = 2'b01;
         if (fun3==3'b000)begin //lb
             alu_control = 4'b0000;
         end
@@ -140,11 +148,28 @@ always @(*) begin
     end
     else if (branch)begin
         alu_control = 4'b0000;
-        imm_sel = 2'b10; //branch selection
+        mem_to_reg = 2'b00;
+        imm_sel = 3'b010; //branch selection
     end
     else if (jal)begin
         alu_control = 4'b0000;
-        imm_sel = 2'b11; //jal selection
+        mem_to_reg = 2'b10;
+        imm_sel = 3'b011; //jal selection
+    end
+    if(jalr)begin
+        mem_to_reg = 2'b00;
+        alu_control = 4'b0000;
+        imm_sel = 3'b000;//i_type selection
+    end
+    else if(lui)begin
+        mem_to_reg = 2'b00;
+        imm_sel = 3'b100;//u_type selection
+        alu_control = 4'b1111;
+    end
+    else if(auipc)begin
+        mem_to_reg = 2'b00;
+        alu_control = 4'b0000;
+        imm_sel = 3'b100;//u_type selection
     end
 end
 
