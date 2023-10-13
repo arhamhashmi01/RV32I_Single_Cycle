@@ -40,7 +40,7 @@ always @(*) begin
     //branch
     Branch =  branch;
     //selection for next address if any jump instrucion run
-    next_sel =  branch | jal | jalr ;
+    next_sel = jal | jalr ;
     //mem enable
     mem_en = store;
 

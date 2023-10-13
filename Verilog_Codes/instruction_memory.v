@@ -1,4 +1,4 @@
-module instructionmemory (
+module instruction_memory (
     input wire clk,
     input wire enable,
     input wire [7:0]address,

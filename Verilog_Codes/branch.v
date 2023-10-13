@@ -17,6 +17,9 @@ module branch (op_a,op_b,fun3,en,result);
             3'b111 : result = (op_a >= op_b) ? 1 : 0 ;
          endcase
       end
+      else begin
+         result = 0;
+      end
    end
    
 endmodule

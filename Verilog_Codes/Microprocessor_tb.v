@@ -11,7 +11,7 @@ module microprocessor_tb();
         .clk(clk),
         .instruction(instruction),
         .rst(rst),
-        .en(enable)
+        .enable(enable)
     );
 
     initial begin
