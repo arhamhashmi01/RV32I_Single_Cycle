@@ -1,12 +1,15 @@
 `include "wrapper_memory.v"
-module memory (
+module memory_stage (
     input wire load,
     input wire store,
+    input wire valid,
     input wire [31:0] op_b,
     input wire [31:0] alu_out_address,
     input wire [31:0] instruction,
     input wire [31:0] wrap_load_in,
 
+    output reg we_re,
+    output reg request,
     output wire [3:0]  mask,
     output wire [31:0] store_data_out,
     output wire [31:0] wrap_load_out
@@ -24,4 +27,9 @@ module memory (
         .data_o(store_data_out),
         .wrap_load_out(wrap_load_out)
     );
+
+    always @ (*) begin
+        request = load | store ;
+        we_re = store ;
+    end
 endmodule

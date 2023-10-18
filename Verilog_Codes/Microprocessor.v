@@ -1,6 +1,5 @@
 `include "Core.v"
-`include "instruction_memory.v"
-`include "data_memory.v"
+`include "memory.v"
 module microprocessor (
     input wire clk,
     input wire enable,
@@ -14,14 +13,24 @@ module microprocessor (
     wire [31:0] alu_out_address;
     wire [31:0] store_data;
     wire [3:0]  mask;
+    wire [3:0]  instruc_mask_singal;
+    wire instruction_mem_we_re;
+    wire instruction_mem_request;
+    wire instruc_mem_valid;
+    wire data_mem_valid;
+    wire data_mem_we_re;
+    wire data_mem_request;
     wire store;
 
     // INSTRUCTION MEMORY
-    instruction_memory u_instruction_mem0 (
+    memory u_instruction_memory(
         .clk(clk),
-        .enable(enable),
+        .we_re(instruction_mem_we_re),
+        .request(instruction_mem_request),
+        .mask(instruc_mask_singal),
         .address(pc_address[9:2]),
         .data_in(instruction),
+        .valid(instruc_mem_valid),
         .data_out(instruction_data)
     );
 
@@ -31,8 +40,14 @@ module microprocessor (
         .rst(rst),
         .instruction(instruction_data),
         .load_data_in(load_data_out),
-        .write(store),
         .mask_singal(mask),
+        .instruc_mask_singal(instruc_mask_singal),
+        .instruction_mem_we_re(instruction_mem_we_re),
+        .instruction_mem_request(instruction_mem_request),
+        .data_mem_we_re(data_mem_we_re),
+        .data_mem_request(data_mem_request),
+        .instruc_mem_valid(instruc_mem_valid),
+        .data_mem_valid(data_mem_valid),
         .store_data_out(store_data),
         .pc_address(pc_address),
         .alu_out_address(alu_out_address)
@@ -40,12 +55,14 @@ module microprocessor (
 
 
     // DATA MEMORY
-    datamemory u_data_mem0(
+    memory u_data_memory(
         .clk(clk),
-        .mem_en(store),
+        .we_re(data_mem_we_re),
+        .request(data_mem_request),
         .address(alu_out_address[9:2]),
-        .storein(store_data),
+        .data_in(store_data),
         .mask(mask),
-        .loadout(load_data_out)
+        .valid(data_mem_valid),
+        .data_out(load_data_out)
     );
 endmodule

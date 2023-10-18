@@ -6,11 +6,17 @@
 module core (
     input wire clk,
     input wire rst,
+    input wire data_mem_valid,
+    input wire instruc_mem_valid,
     input wire [31:0] instruction,
     input wire [31:0] load_data_in,
 
-    output wire write,
+    output wire instruction_mem_we_re,
+    output wire instruction_mem_request,
+    output wire data_mem_we_re,
+    output wire data_mem_request,
     output wire [3:0]  mask_singal,
+    output wire [3:0]  instruc_mask_singal,
     output wire [31:0] store_data_out,
     output wire [31:0] alu_out_address,
     output wire [31:0] pc_address
@@ -43,6 +49,10 @@ module core (
         .instruction_fetch(instruction),
         .instruction(instruc_data_out),
         .address_in(0),
+        .valid(instruc_mem_valid),
+        .mask(instruc_mask_singal),
+        .we_re(instruction_mem_we_re),
+        .request(instruction_mem_request),
         .address_out(pc_address_out)
     );
 
@@ -66,8 +76,6 @@ module core (
         .opb_mux_out(opb_mux_out)
     );
 
-    assign write = store ;
-
     //EXECUTE STAGE
     execute u_executestage(
         .a_i(opa_mux_out),
@@ -79,7 +87,7 @@ module core (
     );
 
     //MEMORY STAGE
-    memory u_memorystage(
+    memory_stage u_memorystage(
         .load(load),
         .store(store),
         .op_b(op_b),
@@ -87,6 +95,9 @@ module core (
         .alu_out_address(alu_res_out),
         .wrap_load_in(load_data_in),
         .mask(mask),
+        .valid(data_mem_valid),
+        .we_re(data_mem_we_re),
+        .request(data_mem_request),
         .store_data_out(store_data_out),
         .wrap_load_out(wrap_load_out)
     );
