@@ -18,7 +18,7 @@ module microprocessor_tb();
         clk = 0;
         rst = 1;
         enable = 0;
-        #5;
+        #10;
         rst=0;
         enable = 0;
         #10;
