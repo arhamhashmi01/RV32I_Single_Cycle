@@ -1,4 +1,6 @@
-module memory (
+module memory #(
+    parameter bit INIT_MEM = 0
+)(
     input wire clk,
     input wire we_re,
     input wire request,
@@ -13,7 +15,8 @@ module memory (
     reg [31:0] mem [0:255];
 
     initial begin
-        $readmemh("instr.mem",mem);
+        if (INIT_MEM)
+            $readmemh("tb/instr.mem",mem);
     end
 
     always @(posedge clk) begin
@@ -32,10 +35,8 @@ module memory (
             end
             valid <= 1'b0;
         end
-    end
-    
-    always @ (posedge clk) begin
-        if (request && we_re==1'b0) begin
+
+        else if (request && !we_re) begin
             valid <= 1'b1;
             data_out <= mem[address];
         end

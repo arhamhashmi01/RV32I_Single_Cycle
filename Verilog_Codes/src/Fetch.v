@@ -1,4 +1,3 @@
-`include "program_counter.v"
 module fetch (
     input wire clk,
     input wire rst,

@@ -1,8 +1,3 @@
-`include "Fetch.v"
-`include "Decode.v"
-`include "Execute.v"
-`include "Memory.v"
-`include "Write_back.v"
 module core (
     input wire clk,
     input wire rst,

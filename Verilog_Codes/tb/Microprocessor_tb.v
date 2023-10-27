@@ -30,7 +30,7 @@ module microprocessor_tb();
         $finish;       
     end
      initial begin
-       $dumpfile("microprocessor.vcd");
+       $dumpfile("temp/microprocessor.vcd");
        $dumpvars(0,microprocessor_tb);
     end
 

@@ -1,9 +1,3 @@
-`include "control_unit.v"
-`include "immediate_gen.v"
-`include "register_file.v"
-`include "branch.v"
-`include "mux3_8.v"
-`include "mux1_2.v"
 module decode (
     input wire clk,
     input wire rst,

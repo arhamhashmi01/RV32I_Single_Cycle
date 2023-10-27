@@ -1,5 +1,3 @@
-`include "type_decoder.v"
-`include "control_decoder.v"
 module controlunit (
     input wire [6:0] opcode,
     input wire [2:0] fun3,

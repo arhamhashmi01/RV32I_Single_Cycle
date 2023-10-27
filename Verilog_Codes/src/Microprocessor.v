@@ -1,5 +1,3 @@
-`include "Core.v"
-`include "memory.v"
 module microprocessor (
     input wire clk,
     input wire enable,
@@ -23,7 +21,9 @@ module microprocessor (
     wire store;
 
     // INSTRUCTION MEMORY
-    memory u_instruction_memory(
+    memory #(
+        .INIT_MEM(1)
+    )u_instruction_memory(
         .clk(clk),
         .we_re(instruction_mem_we_re),
         .request(instruction_mem_request),
@@ -33,6 +33,8 @@ module microprocessor (
         .valid(instruc_mem_valid),
         .data_out(instruction_data)
     );
+
+    (((ld | st) & dmem_valid))
 
     //CORE
     core u_core(

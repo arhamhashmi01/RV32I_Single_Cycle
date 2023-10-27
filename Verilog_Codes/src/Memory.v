@@ -1,4 +1,3 @@
-`include "wrapper_memory.v"
 module memory_stage (
     input wire load,
     input wire store,

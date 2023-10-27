@@ -1,5 +1,3 @@
-`include "alu.v"
-`include "adder.v"
 module execute (
     input wire [31:0] a_i,
     input wire [31:0] b_i,
