@@ -38,13 +38,14 @@ module core (
     fetch u_fetchstage(
         .clk(clk),
         .rst(rst),
+        .load(load),
         .next_sel(next_sel),
         .branch_reselt(branch_result),
         .next_address(alu_res_out),
         .instruction_fetch(instruction),
         .instruction(instruc_data_out),
         .address_in(0),
-        .valid(instruc_mem_valid),
+        .valid(data_mem_valid),
         .mask(instruc_mask_singal),
         .we_re(instruction_mem_we_re),
         .request(instruction_mem_request),
@@ -83,6 +84,7 @@ module core (
 
     //MEMORY STAGE
     memory_stage u_memorystage(
+        .rst(rst),
         .load(load),
         .store(store),
         .op_b(op_b),
@@ -90,7 +92,7 @@ module core (
         .alu_out_address(alu_res_out),
         .wrap_load_in(load_data_in),
         .mask(mask),
-        .valid(data_mem_valid),
+        .valid(instruc_mem_valid),
         .we_re(data_mem_we_re),
         .request(data_mem_request),
         .store_data_out(store_data_out),

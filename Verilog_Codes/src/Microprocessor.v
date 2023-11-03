@@ -21,10 +21,11 @@ module microprocessor (
     wire store;
 
     // INSTRUCTION MEMORY
-    memory #(
+    memory_top #(
         .INIT_MEM(1)
     )u_instruction_memory(
         .clk(clk),
+        .rst(rst),
         .we_re(instruction_mem_we_re),
         .request(instruction_mem_request),
         .mask(instruc_mask_singal),
@@ -33,8 +34,6 @@ module microprocessor (
         .valid(instruc_mem_valid),
         .data_out(instruction_data)
     );
-
-    (((ld | st) & dmem_valid))
 
     //CORE
     core u_core(
@@ -57,8 +56,9 @@ module microprocessor (
 
 
     // DATA MEMORY
-    memory u_data_memory(
+    memory_top u_data_memory(
         .clk(clk),
+        .rst(rst),
         .we_re(data_mem_we_re),
         .request(data_mem_request),
         .address(alu_out_address[9:2]),

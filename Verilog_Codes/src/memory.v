@@ -1,5 +1,5 @@
-module memory #(
-    parameter bit INIT_MEM = 0
+module memory#(
+    parameter INIT_MEM = 0
 )(
     input wire clk,
     input wire we_re,
@@ -8,7 +8,6 @@ module memory #(
     input wire [31:0]data_in,
     input wire [3:0]mask,
 
-    output reg valid,
     output reg [31:0]data_out
 );
 
@@ -33,11 +32,9 @@ module memory #(
             if(mask[3]) begin
                 mem[address][31:24] <= data_in[31:24];
             end
-            valid <= 1'b0;
         end
 
         else if (request && !we_re) begin
-            valid <= 1'b1;
             data_out <= mem[address];
         end
     end

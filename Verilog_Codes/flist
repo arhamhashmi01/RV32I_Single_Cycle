@@ -10,6 +10,7 @@ ${CORE_ROOT}/src/Execute.v
 ${CORE_ROOT}/src/Fetch.v
 ${CORE_ROOT}/src/immediate_gen.v
 ${CORE_ROOT}/src/memory.v
+${CORE_ROOT}/src/memory_top.v
 ${CORE_ROOT}/src/Memory.v
 ${CORE_ROOT}/src/Microprocessor.v
 ${CORE_ROOT}/src/mux1_2.v
