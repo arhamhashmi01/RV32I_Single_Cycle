@@ -13,7 +13,8 @@ module fetch (
     output reg request,
     output reg [3:0] mask,
     output wire [31:0] address_out,
-    output reg  [31:0] instruction
+    output reg  [31:0] instruction,
+    output wire [31:0] pre_address_pc
     );
 
     // PROGRAM COUNTER
@@ -27,11 +28,12 @@ module fetch (
         .next_address(next_address),
         .branch_reselt(branch_reselt),
         .address_in(0),
-        .address_out(address_out)
+        .address_out(address_out),
+        .pre_address_pc(pre_address_pc)
     );
 
     always @ (*) begin
-        if (load & !valid) begin
+        if ((load && !valid)) begin
             mask = 4'b1111; 
             we_re = 1'b0;
             request = 1'b0;

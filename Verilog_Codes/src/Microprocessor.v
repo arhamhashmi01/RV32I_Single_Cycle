@@ -1,6 +1,5 @@
 module microprocessor (
     input wire clk,
-    input wire enable,
     input wire rst,
     input wire [31:0]instruction
     );
@@ -18,10 +17,11 @@ module microprocessor (
     wire data_mem_valid;
     wire data_mem_we_re;
     wire data_mem_request;
+    wire load_signal;
     wire store;
 
     // INSTRUCTION MEMORY
-    memory_top #(
+    instruc_mem_top #(
         .INIT_MEM(1)
     )u_instruction_memory(
         .clk(clk),
@@ -42,6 +42,7 @@ module microprocessor (
         .instruction(instruction_data),
         .load_data_in(load_data_out),
         .mask_singal(mask),
+        .load_signal(load_signal),
         .instruc_mask_singal(instruc_mask_singal),
         .instruction_mem_we_re(instruction_mem_we_re),
         .instruction_mem_request(instruction_mem_request),
@@ -56,7 +57,7 @@ module microprocessor (
 
 
     // DATA MEMORY
-    memory_top u_data_memory(
+    data_mem_top u_data_memory(
         .clk(clk),
         .rst(rst),
         .we_re(data_mem_we_re),
@@ -64,6 +65,7 @@ module microprocessor (
         .address(alu_out_address[9:2]),
         .data_in(store_data),
         .mask(mask),
+        .load(load_signal),
         .valid(data_mem_valid),
         .data_out(load_data_out)
     );
