@@ -1,10 +1,10 @@
 module fetch_pipe(
   input wire clk,
-  input wire pre_address_pc,
-  input wire instruction_fetch,
+  input wire [31:0] pre_address_pc,
+  input wire [31:0] instruction_fetch,
 
-  output wire pre_address_out,
-  output wire instruction
+  output wire [31:0] pre_address_out,
+  output wire [31:0] instruction
  );
 
   reg [31:0] pre_address,instruc;

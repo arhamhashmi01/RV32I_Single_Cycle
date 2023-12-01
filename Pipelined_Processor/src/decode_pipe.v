@@ -1,5 +1,5 @@
 module  decode_pipe(
-  input wire clk;
+  input wire clk,
   input wire load_in,
   input wire store_in,
   input wire next_sel_in,
@@ -9,6 +9,8 @@ module  decode_pipe(
   input wire [31:0] opa_mux_in,
   input wire [31:0] opb_mux_in,
   input wire [31:0] opb_data_in,
+  input wire [31:0] pre_address_in,
+  input wire [31:0] instruction_in,
 
   output wire load,
   output wire store,
@@ -18,13 +20,15 @@ module  decode_pipe(
   output wire [1:0]  mem_to_reg,
   output wire [31:0] opa_mux_out,
   output wire [31:0] opb_mux_out,
-  output wire [31:0] opb_data_out
+  output wire [31:0] opb_data_out,
+  output wire [31:0] pre_address_out,
+  output wire [31:0] instruction_out
  );
 
   reg l,s,nextsel,branch_res;
   reg [1:0] mem_reg;
   reg [3:0] alu_con;
-  reg [31:0] opa_mux,opb_mux,opb_data;
+  reg [31:0] opa_mux,opb_mux,opb_data,pre_address,instruction;
 
   always @ (posedge clk) begin
     l <= load_in;
@@ -36,6 +40,8 @@ module  decode_pipe(
     opa_mux <= opa_mux_in;
     opb_mux <= opb_mux_in;
     opb_data <= opb_data_in;
+    pre_address <= pre_address_in;
+    instruction <= instruction_in;
   end
 
   assign load = l;
@@ -47,4 +53,6 @@ module  decode_pipe(
   assign opa_mux_out = opa_mux;
   assign opb_mux_out = opb_mux;
   assign opb_data_out = opb_data;
+  assign instruction_out = instruction;
+  assign pre_address_out = pre_address;
 endmodule

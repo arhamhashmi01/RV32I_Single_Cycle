@@ -14,6 +14,7 @@ module pc (
 
     reg [31:0] pre_address;
     always @(posedge clk or negedge rst) begin
+        pre_address <= address_out;
         if(!rst)begin
             address_out <= 0;
         end
@@ -26,8 +27,6 @@ module pc (
         else begin
             address_out <= address_out + 32'd4;
         end
-
-        pre_address <= address_out;
     end
 
     assign pre_address_pc = pre_address;

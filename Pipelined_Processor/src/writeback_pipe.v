@@ -1,5 +1,5 @@
 module writeback_pipe(
-  input wire clk
+  input wire clk,
   input wire [31:0] rd_sel_mux_in,
 
   output wire [31:0] rd_sel_mux_out
