@@ -1,14 +1,17 @@
 module decode (
     input wire clk,
     input wire rst,
+    input wire reg_write_in,
     input wire [31:0] instruction,
     input wire [31:0] pc_address,
-    inout wire [31:0] rd_wb_data,
+    input wire [31:0] rd_wb_data,
+    input wire [31:0] instruction_rd_add,
 
     output wire load,
     output wire store,
     output wire next_sel,
     output wire branch_result,
+    output wire reg_write_out,
     output wire [3:0] alu_control,
     output wire [1:0]  mem_to_reg,
     output wire [31:0] opa_mux_out,
@@ -16,7 +19,6 @@ module decode (
     output wire [31:0] opb_data
     );
 
-    wire reg_write;
     wire branch;
     wire operand_a;
     wire operand_b;
@@ -31,7 +33,7 @@ module decode (
         .opcode(instruction[6:0]),
         .fun3(instruction[14:12]),
         .fun7(instruction[30]),
-        .reg_write(reg_write),
+        .reg_write(reg_write_out),
         .imm_sel(imm_sel),
         .next_sel(next_sel),
         .operand_b(operand_b),
@@ -69,10 +71,10 @@ module decode (
     (
         .clk(clk),
         .rst(rst),
-        .en(reg_write),
+        .en(reg_write_in),
         .rs1(instruction[19:15]),
         .rs2(instruction[24:20]),
-        .rd(instruction[11:7]),
+        .rd(instruction_rd_add[11:7]),
         .data(rd_wb_data),
         .op_a(op_a),
         .op_b(op_b)

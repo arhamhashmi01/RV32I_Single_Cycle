@@ -2,6 +2,7 @@ module execute_pipe(
   input wire clk,
   input wire load_in,
   input wire store_in,
+  input wire reg_write_in,
   input wire [31:0] opb_datain,
   input wire [31:0] alu_res,
   input wire [1:0] mem_reg_in,
@@ -9,6 +10,7 @@ module execute_pipe(
   input wire [31:0] pre_address_in,
   input wire [31:0] instruction_in,
 
+  output wire reg_write_out,
   output wire load_out,
   output wire store_out,
   output wire [31:0] opb_dataout,
@@ -19,7 +21,7 @@ module execute_pipe(
   output wire [31:0] instruction_out
   );
 
-  reg load , store;
+  reg load , store , reg_write;
   reg [1:0] mem_reg;
   reg [31:0] alu_result , nextsel_addr;
   reg [31:0] pre_address , instruction , opb_data;
@@ -33,8 +35,10 @@ module execute_pipe(
     instruction <= instruction_in;
     alu_result <= alu_res;
     nextsel_addr <= next_sel_addr;
+    reg_write <= reg_write_in;
   end
 
+  assign reg_write_out = reg_write;
   assign load_out = load;
   assign store_out = store;
   assign mem_reg_out = mem_reg;

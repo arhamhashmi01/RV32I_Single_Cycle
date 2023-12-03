@@ -4,6 +4,7 @@ module  decode_pipe(
   input wire store_in,
   input wire next_sel_in,
   input wire branch_result_in,
+  input wire reg_write_in,
   input wire [3:0] alu_control_in,
   input wire [1:0]  mem_to_reg_in,
   input wire [31:0] opa_mux_in,
@@ -16,6 +17,7 @@ module  decode_pipe(
   output wire store,
   output wire next_sel,
   output wire branch_result,
+  output wire reg_write_out,
   output wire [3:0] alu_control,
   output wire [1:0]  mem_to_reg,
   output wire [31:0] opa_mux_out,
@@ -26,6 +28,7 @@ module  decode_pipe(
  );
 
   reg l,s,nextsel,branch_res;
+  reg reg_write;
   reg [1:0] mem_reg;
   reg [3:0] alu_con;
   reg [31:0] opa_mux,opb_mux,opb_data,pre_address,instruction;
@@ -42,11 +45,13 @@ module  decode_pipe(
     opb_data <= opb_data_in;
     pre_address <= pre_address_in;
     instruction <= instruction_in;
+    reg_write <= reg_write_in;
   end
 
   assign load = l;
   assign store = s;
   assign next_sel = nextsel;
+  assign reg_write_out = reg_write;
   assign branch_result = branch_res;
   assign mem_to_reg = mem_reg;
   assign alu_control = alu_con;

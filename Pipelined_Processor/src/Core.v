@@ -18,15 +18,17 @@ module core (
     output wire [31:0] pc_address
     );
 
-    wire [31:0] instruction_fetch , instruction_decode , instruction_execute , instruction_memstage;
+    wire [31:0] instruction_wb_dec;
+    wire [31:0] instruction_fetch , instruction_decode , instruction_execute , instruction_memstage , instruction_wb;
     wire [31:0] pre_pc_addr_fetch , pre_pc_addr_decode , pre_pc_addr_execute , pre_pc_addr_memstage; 
+    wire reg_write_decode , reg_write_execute , reg_write_memstage , reg_write_wb , reg_write_wb_dec;
     wire load_decode , load_execute , load_memstage;
     wire store_decode , store_execute , store_memstage;
     wire next_sel_decode , next_sel_execute;
     wire branch_result_decode , branch_result_execute;
-    wire [3:0] mask;
-    wire [3:0] alu_control_decode , alu_control_execute;
-    wire [1:0] mem_to_reg_decode , mem_to_reg_execute , mem_to_reg_memstage , mem_to_reg_wb;
+    wire [3:0]  mask;
+    wire [3:0]  alu_control_decode , alu_control_execute;
+    wire [1:0]  mem_to_reg_decode , mem_to_reg_execute , mem_to_reg_memstage , mem_to_reg_wb;
     wire [31:0] op_b_decode , op_b_execute , op_b_memstage;
     wire [31:0] opa_mux_out_decode , opa_mux_out_execute;
     wire [31:0] opb_mux_out_decode , opb_mux_out_execute;
@@ -39,7 +41,7 @@ module core (
     fetch u_fetchstage(
         .clk(clk),
         .rst(rst),
-        .load(load_execute),
+        .load(load_decode),
         .next_sel(next_sel_execute),
         .branch_reselt(branch_result_execute),
         .next_address(alu_res_execute),
@@ -70,9 +72,12 @@ module core (
         .instruction(instruction_decode),
         .pc_address(pre_pc_addr_decode),
         .rd_wb_data(rd_wbdata_write),
+        .reg_write_in(reg_write_wb_dec),
+        .instruction_rd_add(instruction_wb_dec),
         .load(load_decode),
         .store(store_decode),
         .next_sel(next_sel_decode),
+        .reg_write_out(reg_write_decode),
         .mem_to_reg(mem_to_reg_decode),
         .branch_result(branch_result_decode),
         .opb_data(op_b_decode),
@@ -95,6 +100,8 @@ module core (
         .opb_mux_in(opb_mux_out_decode),
         .pre_address_in(pre_pc_addr_decode),
         .instruction_in(instruction_decode),
+        .reg_write_in(reg_write_decode),
+        .reg_write_out(reg_write_execute),
         .load(load_execute),
         .store(store_execute),
         .next_sel(next_sel_execute),
@@ -130,6 +137,8 @@ module core (
         .next_sel_addr(next_address_execute),
         .pre_address_in(pre_pc_addr_execute),
         .instruction_in(instruction_execute),
+        .reg_write_in(reg_write_execute),
+        .reg_write_out(reg_write_memstage),
         .load_out(load_memstage),
         .store_out(store_memstage),
         .opb_dataout(op_b_memstage),
@@ -168,9 +177,13 @@ module core (
         .wrap_load_in(wrap_load_memstage),
         .alu_res(alu_res_memstage),
         .next_sel_addr(next_address_memstage),
+        .instruction_in(instruction_memstage),
+        .reg_write_in(reg_write_memstage),
+        .reg_write_out(reg_write_wb),
         .alu_res_out(alu_res_wb),
         .mem_reg_out(mem_to_reg_wb),
         .next_sel_address(next_address_wb),
+        .instruction_out(instruction_wb),
         .wrap_load_out(wrap_load_wb)
     );
 
@@ -186,7 +199,11 @@ module core (
     //WRITE BACK STAGE PIPELINE
     writeback_pipe u_wbpipeline(
         .clk(clk),
+        .instruction_in(instruction_wb),
         .rd_sel_mux_in(rd_wb_data),
-        .rd_sel_mux_out(rd_wbdata_write)
+        .reg_write_in(reg_write_wb),
+        .reg_write_out(reg_write_wb_dec),
+        .rd_sel_mux_out(rd_wbdata_write),
+        .instruction_out(instruction_wb_dec)
     );
 endmodule
