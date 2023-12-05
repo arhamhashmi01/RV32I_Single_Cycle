@@ -26,7 +26,7 @@ module control_decoder (
 
 always @(*) begin
     //reg write signal for register file
-    reg_write = r_type | i_type | load | jal;
+    reg_write = r_type | i_type | load | jal | jalr | lui | auipc;
     //operand a select for first input of alu
     operand_a = branch | jal | auipc;
     //operand b signal for second input of alu
