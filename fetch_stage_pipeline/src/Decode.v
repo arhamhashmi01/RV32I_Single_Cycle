@@ -1,25 +1,22 @@
 module decode (
     input wire clk,
     input wire rst,
-    input wire reg_write_in,
     input wire [31:0] instruction,
     input wire [31:0] pc_address,
-    input wire [31:0] rd_wb_data,
-    input wire [31:0] instruction_rd_add,
+    inout wire [31:0] rd_wb_data,
 
     output wire load,
     output wire store,
     output wire next_sel,
     output wire branch_result,
-    output wire reg_write_out,
     output wire [3:0] alu_control,
     output wire [1:0]  mem_to_reg,
     output wire [31:0] opa_mux_out,
     output wire [31:0] opb_mux_out,
-    output wire [4:0]  rs1 , rs2, 
     output wire [31:0] opb_data
     );
 
+    wire reg_write;
     wire branch;
     wire operand_a;
     wire operand_b;
@@ -34,7 +31,7 @@ module decode (
         .opcode(instruction[6:0]),
         .fun3(instruction[14:12]),
         .fun7(instruction[30]),
-        .reg_write(reg_write_out),
+        .reg_write(reg_write),
         .imm_sel(imm_sel),
         .next_sel(next_sel),
         .operand_b(operand_b),
@@ -72,17 +69,15 @@ module decode (
     (
         .clk(clk),
         .rst(rst),
-        .en(reg_write_in),
+        .en(reg_write),
         .rs1(instruction[19:15]),
         .rs2(instruction[24:20]),
-        .rd(instruction_rd_add[11:7]),
+        .rd(instruction[11:7]),
         .data(rd_wb_data),
         .op_a(op_a),
         .op_b(op_b)
     );
 
-    assign rs1 = instruction[19:15];
-    assign rs2 = instruction[24:20];
     assign opb_data = op_b ;
 
     //SELECTION OF PROGRAM COUNTER OR OPERAND A
