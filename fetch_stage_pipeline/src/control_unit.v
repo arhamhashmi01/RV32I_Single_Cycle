@@ -2,6 +2,7 @@ module controlunit (
     input wire [6:0] opcode,
     input wire [2:0] fun3,
     input wire fun7,
+    input wire valid,
 
     output wire reg_write,
     output wire [2:0]imm_sel,
@@ -28,6 +29,7 @@ module controlunit (
 
     type_decoder u_typedec0 (
         .opcode(opcode),
+        .valid(valid),
         .r_type(r_type),
         .i_type(i_type),
         .load(load),

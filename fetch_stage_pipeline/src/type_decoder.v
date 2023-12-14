@@ -1,6 +1,7 @@
-module type_decoder (opcode,r_type,i_type,load,store,branch,jal,jalr,lui,auipc);
+module type_decoder (opcode,r_type,i_type,load,store,branch,jal,jalr,lui,auipc,valid);
 
     input wire [6:0]opcode;
+    input wire valid;
     
     output reg r_type;
     output reg i_type; 
@@ -32,8 +33,13 @@ module type_decoder (opcode,r_type,i_type,load,store,branch,jal,jalr,lui,auipc);
             7'b0100011:begin 
                 store = 1'b1;
             end
-            7'b0000011:begin 
-                load = 1'b1;
+            7'b0000011:begin
+                if (valid) begin 
+                    load = 1'b0;
+                end
+                else begin
+                    load = 1'b1;
+                end
             end
             7'b1100011:begin 
                 branch = 1'b1;

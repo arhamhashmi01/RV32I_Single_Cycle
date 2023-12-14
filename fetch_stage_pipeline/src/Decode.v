@@ -3,7 +3,8 @@ module decode (
     input wire rst,
     input wire [31:0] instruction,
     input wire [31:0] pc_address,
-    inout wire [31:0] rd_wb_data,
+    input wire [31:0] rd_wb_data,
+    input wire valid,
 
     output wire load,
     output wire store,
@@ -31,6 +32,7 @@ module decode (
         .opcode(instruction[6:0]),
         .fun3(instruction[14:12]),
         .fun7(instruction[30]),
+        .valid(valid),
         .reg_write(reg_write),
         .imm_sel(imm_sel),
         .next_sel(next_sel),

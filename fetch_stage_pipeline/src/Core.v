@@ -72,6 +72,7 @@ module core (
     decode u_decodestage(
         .clk(clk),
         .rst(rst),
+        .valid(data_mem_valid),
         .instruction(instruction_decode),
         .pc_address(pre_pc_addr_decode),
         .rd_wb_data(rd_wb_data),
@@ -115,7 +116,7 @@ module core (
         .wrap_load_out(wrap_load_out)
     );
 
-    assign alu_out_address = alu_res_out ;
+    assign alu_out_address = alu_res_out;
     assign mask_singal = mask ;
 
     //WRITE BACK STAGE

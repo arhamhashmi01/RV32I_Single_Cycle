@@ -16,16 +16,21 @@ module fetch_pipe(
   always @ (posedge clk) begin
     if (next_select | branch_result) begin
       // If jal, jalr, or branch result is high, flush the pipeline for one cycle
-      pre_address <= pre_address_pc;
-      instruc <= 0;
+      pre_address <= 32'b0;
+      instruc <= 32'b0;
       flush_pipeline <= 1; // Set flag to flush for one cycle
     end 
     else if (flush_pipeline) begin
       // Stall the pipeline for one additional cycle after flushing
-      pre_address <= pre_address_pc;
-      instruc <= 0;
+      pre_address <= 32'b0;
+      instruc <= 32'b0;
       flush_pipeline <= 0; // Reset flag after one cycle stall
-    end 
+    end
+    else if (load) begin
+      //stall pipeline
+      pre_address <= pre_address_out;
+      instruc <= instruction;
+    end
     else begin
       // For other instructions, proceed normally
       pre_address <= pre_address_pc;
