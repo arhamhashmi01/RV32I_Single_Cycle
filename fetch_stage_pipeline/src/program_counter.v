@@ -27,7 +27,12 @@ module pc (
             address_out <= address_out + 32'd4;
         end
 
-        pre_address <= address_out;
+        if ((load && !dmem_valid))begin
+            pre_address <= pre_address_pc;
+        end
+        else begin
+            pre_address <= address_out;
+        end
     end
 
     assign pre_address_pc = pre_address;

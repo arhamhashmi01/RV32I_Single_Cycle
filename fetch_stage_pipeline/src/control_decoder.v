@@ -35,8 +35,6 @@ always @(*) begin
     Load = load;
     //store
     Store = store;
-    // signal for write back data in register file either alu and data memory
-    mem_to_reg = load;
     //branch
     Branch =  branch;
     //selection for next address if any jump instrucion run
