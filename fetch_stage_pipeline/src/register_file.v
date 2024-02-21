@@ -20,8 +20,10 @@ module registerfile (
                 register[i] <= 32'b0;
             end
         end
-        else if(en)begin
-            register[rd] <= data;
+        else begin
+            if (en) begin
+                register[rd] <= data;
+            end
         end
     end
 

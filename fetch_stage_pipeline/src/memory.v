@@ -34,8 +34,10 @@ module memory#(
             end
         end
 
-        else if (request && !we_re) begin
-            data_out <= mem[address];
+        else begin
+            if (request && !we_re) begin
+                data_out <= mem[address];
+            end
         end
     end
 endmodule
