@@ -14,19 +14,24 @@ module pc (
 
     reg [31:0] pre_address;
     always @(posedge clk or negedge rst) begin
-        pre_address <= address_out;
         if(!rst)begin
             address_out <= 0;
         end
-        else if (next_sel | branch_reselt)begin
-            address_out <= next_address;
-        end
-        else if ((load && !dmem_valid))begin
-            address_out <= address_out;
-        end
+
         else begin
-            address_out <= address_out + 32'd4;
+            if (next_sel | branch_reselt)begin
+            address_out <= next_address;
+            end
+            else if ((load && !dmem_valid))begin
+                address_out <= address_out;
+                pre_address <= pre_address_pc;
+            end
+            else begin
+                pre_address <= address_out;
+                address_out <= address_out + 32'd4;
+            end
         end
+        
     end
 
     assign pre_address_pc = pre_address;
