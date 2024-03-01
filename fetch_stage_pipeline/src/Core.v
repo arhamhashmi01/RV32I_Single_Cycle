@@ -15,7 +15,8 @@ module core (
     output wire [3:0]  instruc_mask_singal,
     output wire [31:0] store_data_out,
     output wire [31:0] alu_out_address,
-    output wire [31:0] pc_address
+    output wire [31:0] pc_address,
+    output wire [31:0] data_out
     );
 
     wire [31:0] instruc_data_out;
@@ -26,9 +27,9 @@ module core (
     wire store;
     wire next_sel;
     wire branch_result;
-    wire [3:0] mask;
-    wire [3:0] alu_control;
-    wire [1:0] mem_to_reg;
+    wire [3:0]  mask;
+    wire [3:0]  alu_control;
+    wire [1:0]  mem_to_reg;
     wire [31:0] op_b;
     wire [31:0] opa_mux_out;
     wire [31:0] opb_mux_out;
@@ -127,4 +128,6 @@ module core (
         .next_sel_address(next_sel_address),
         .rd_sel_mux_out(rd_wb_data)
     );
+
+    assign data_out = rd_wb_data;
 endmodule
