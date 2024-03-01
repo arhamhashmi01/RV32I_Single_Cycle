@@ -30,7 +30,7 @@ The RV32I processor is a RISC-V architecture-based design that adheres to the RV
 
 To begin using or contributing to this project, follow these steps:
 
-  **Clone the Repository:** git clone https://github.com/arhamhashmi01/RV32I_Single_Cycle.git.
+  **Clone the Repository:** git clone https://github.com/arhamhashmi01/RV32I_Single_Cycle.git
   
   **Explore the Code:** Review the Verilog source files to understand the implementation details of the fetch stage processor and synchronous memory module.
   
