@@ -16,7 +16,6 @@ module core (
     output wire [31:0] store_data_out,
     output wire [31:0] alu_out_address,
     output wire [31:0] pc_address,
-    output wire [31:0] data_out
     );
 
     wire [31:0] instruc_data_out;
@@ -128,6 +127,4 @@ module core (
         .next_sel_address(next_sel_address),
         .rd_sel_mux_out(rd_wb_data)
     );
-
-    assign data_out = rd_wb_data;
 endmodule

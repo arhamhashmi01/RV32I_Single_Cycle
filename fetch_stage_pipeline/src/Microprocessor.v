@@ -1,9 +1,7 @@
 module microprocessor (
     input wire clk,
     input wire rst,
-    input wire [31:0]instruction,
-
-    output wire [31:0] data_out
+    input wire [31:0]instruction
     );
 
     wire [31:0] instruction_data;
@@ -54,8 +52,7 @@ module microprocessor (
         .data_mem_valid(data_mem_valid),
         .store_data_out(store_data),
         .pc_address(pc_address),
-        .alu_out_address(alu_out_address),
-        .data_out(data_out)
+        .alu_out_address(alu_out_address)
     );
 
 
