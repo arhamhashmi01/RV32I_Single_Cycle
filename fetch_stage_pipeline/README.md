@@ -5,21 +5,21 @@ Welcome to the repository containing a synthesizable implementation of a RISC-V 
 ## Overview
 The RV32I processor is a RISC-V architecture-based design that adheres to the RV32I ISA, supporting integer arithmetic and logical operations, control flow instructions, and memory access operations. This project focuses specifically on the fetch stage of the processor's pipeline, responsible for fetching instructions from memory and preparing them for subsequent stages of execution.
 ## Features
-# Fetch Stage Pipeline
+### Fetch Stage Pipeline
 **Multi-Stage Pipeline Architecture:** The fetch stage is part of a multi-stage pipeline architecture designed for efficient instruction processing.
 
 **Instruction Fetching:** Fetches instructions from memory based on the program counter (PC) and prepares them for decoding and execution.
 
 **Control Hazard Handling:** Implements mechanisms to handle control hazards, ensuring correct program execution even in the presence of branch and jump instructions.
 
-# Synchronous Memory
+### Synchronous Memory
 **Synchronous Memory Module:** Includes a synchronous memory module designed to meet the timing requirements of the processor.
 
 **Control Hazard Handling:** Incorporates techniques such as branch prediction or stall mechanisms to mitigate control hazards and maintain pipeline efficiency.
 
 **Instruction Execution:** Supports the execution of all types of instructions specified in the RV32I ISA, including arithmetic, logical, control flow, and memory access instructions.
 
-# Verilog Implementation
+### Verilog Implementation
 **Verilog HDL:** Developed entirely in Verilog Hardware Description Language (HDL) for synthesis on FPGA or ASIC platforms.
 
 **Modular Design:** Organized into modular components for ease of understanding, scalability, and potential reuse in larger processor designs.
