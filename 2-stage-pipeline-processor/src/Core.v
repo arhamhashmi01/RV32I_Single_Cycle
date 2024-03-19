@@ -149,6 +149,7 @@ module core (
         .alu_out_address(alu_res_out_execute),
         .wrap_load_in(load_data_in),
         .mask(mask),
+        .data_valid(data_mem_valid),
         .valid(instruc_mem_valid),
         .we_re(data_mem_we_re),
         .request(data_mem_request),
