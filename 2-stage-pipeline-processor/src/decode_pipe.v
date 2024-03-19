@@ -2,6 +2,7 @@ module  decode_pipe(
   input wire clk,
   input wire load_in,
   input wire store_in,
+  input wire jalr_in,
   input wire next_sel_in,
   input wire branch_result_in,
   input wire reg_write_in,
@@ -17,6 +18,7 @@ module  decode_pipe(
 
   output wire load,
   output wire store,
+  output wire jalr_out,
   output wire next_sel,
   output wire branch_result,
   output wire reg_write_out,
@@ -31,7 +33,7 @@ module  decode_pipe(
   output wire [31:0] instruction_out
  );
 
-  reg l,s,nextsel,branch_res;
+  reg l,s,nextsel,branch_res,jalr;
   reg reg_write;
   reg [1:0] mem_reg;
   reg [3:0] alu_con;
@@ -40,6 +42,7 @@ module  decode_pipe(
   always @ (posedge clk) begin
     l <= load_in;
     s <= store_in;
+    jalr <= jalr_in;
     nextsel <= next_sel_in;
     branch_res <= branch_result_in;
     mem_reg <= mem_to_reg_in;
@@ -54,6 +57,7 @@ module  decode_pipe(
 
   assign load = l;
   assign store = s;
+  assign jalr_out = jalr;
   assign next_sel = nextsel;
   assign reg_write_out = reg_write;
   assign branch_result = branch_res;

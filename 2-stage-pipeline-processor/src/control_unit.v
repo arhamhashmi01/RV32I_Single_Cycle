@@ -3,6 +3,7 @@ module controlunit (
     input wire [2:0] fun3,
     input wire fun7,
     input wire valid,
+    input wire load_control,
 
     output wire reg_write,
     output wire [2:0]imm_sel,
@@ -39,7 +40,8 @@ module controlunit (
         .jal(jal),
         .jalr(jalr),
         .lui(lui),
-        .auipc(auipc)
+        .auipc(auipc),
+        .load_signal_controller(load_control)
     );
 
     control_decoder u_controldec0 (

@@ -20,10 +20,11 @@ module pc (
         end
 
         else begin
+            pre_address  <= address_out;
             if (next_sel | branch_reselt)begin
-            address_out <= next_address;
+                address_out <= next_address;
             end
-            else if (jalr) begin
+            else if (jalr)begin
                 address_out <= next_address;
             end
             else if ((load && !dmem_valid))begin
@@ -31,7 +32,6 @@ module pc (
                 pre_address <= pre_address_pc;
             end
             else begin
-                pre_address <= address_out;
                 address_out <= address_out + 32'd4;
             end
         end

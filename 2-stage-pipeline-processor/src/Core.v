@@ -26,6 +26,7 @@ module core (
     wire store_decode , store_execute;
     wire jalr_decode;
     wire next_sel_decode , next_sel_execute;
+    wire reg_write_decode , reg_write_execute;
     wire branch_result_decode , branch_result_execute;
     wire [3:0] mask;
     wire [3:0] alu_control_decode , alu_control_execute;
@@ -43,7 +44,7 @@ module core (
         .clk(clk),
         .rst(rst),
         .load(load_decode),
-        .jalr(jalr_decode),
+        .jalr(jalr_execute),
         .next_sel(next_sel_execute),
         .branch_reselt(branch_result_execute),
         .next_address(alu_res_out_execute),
@@ -76,6 +77,8 @@ module core (
         .clk(clk),
         .rst(rst),
         .valid(data_mem_valid),
+        .load_control_signal(load_execute),
+        .reg_write_en_in(reg_write_execute),
         .instruction(instruction_decode),
         .pc_address(pre_pc_addr_decode),
         .rd_wb_data(rd_wb_data),
@@ -83,6 +86,7 @@ module core (
         .store(store_decode),
         .jalr(jalr_decode),
         .next_sel(next_sel_decode),
+        .reg_write_en_out(reg_write_decode),
         .mem_to_reg(mem_to_reg_decode),
         .branch_result(branch_result_decode),
         .opb_data(op_b_decode),
@@ -97,6 +101,7 @@ module core (
         .clk(clk),
         .load_in(load_decode),
         .store_in(store_decode),
+        .jalr_in(jalr_decode),
         .next_sel_in(next_sel_decode),
         .mem_to_reg_in(mem_to_reg_decode),
         .branch_result_in(branch_result_decode),
@@ -108,6 +113,7 @@ module core (
         .instruction_in(instruction_decode),
         .reg_write_in(reg_write_decode),
         .reg_write_out(reg_write_execute),
+        .jalr_out(jalr_execute),
         .load(load_execute),
         .store(store_execute),
         .next_sel(next_sel_execute),
@@ -121,7 +127,7 @@ module core (
         .instruction_out(instruction_execute)
     );
 
-    assign load_signal = load_decode;
+    assign load_signal = load_execute;
 
     //EXECUTE STAGE
     execute u_executestage(

@@ -15,7 +15,7 @@ module core (
     output wire [3:0]  instruc_mask_singal,
     output wire [31:0] store_data_out,
     output wire [31:0] alu_out_address,
-    output wire [31:0] pc_address,
+    output wire [31:0] pc_address
     );
 
     wire [31:0] instruc_data_out;
