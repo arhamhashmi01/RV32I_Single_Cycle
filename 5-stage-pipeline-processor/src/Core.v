@@ -23,7 +23,7 @@ module core (
     wire [31:0] instruction_fetch , instruction_decode , instruction_execute;
     wire [31:0] instruction_memstage , instruction_wb;
     wire [31:0] pre_pc_addr_fetch , pre_pc_addr_decode , pre_pc_addr_execute;
-    wire [31:0] pre_pc_addr_memstage;
+    wire [31:0] pre_pc_addr_memstage , pre_pc_addr_wb;
     wire load_decode , load_execute , load_memstage;
     wire store_decode , store_execute , store_memstage;
     wire jalr_decode;
@@ -36,6 +36,7 @@ module core (
     wire [1:0]  mem_to_reg_memstage , mem_to_reg_wb;
     wire [4:0]  rs1_decode , rs1_execute;
     wire [4:0]  rs2_decode , rs2_execute;
+    wire [4:0]  rd_memstage;
     wire [31:0] op_b_decode , op_b_execute , op_b_memstage;
     wire [31:0] opa_mux_out_decode , opa_mux_out_execute;
     wire [31:0] opb_mux_out_decode , opb_mux_out_execute;
@@ -45,6 +46,7 @@ module core (
     wire [31:0] next_sel_address_wb;
     wire [31:0] wrap_load_memstage , wrap_load_wb;
     wire [31:0] rd_wb_data;
+    wire [31:0] alu_in_a , alu_in_b;
 
     //FETCH STAGE
     fetch u_fetchstage(
@@ -194,6 +196,7 @@ module core (
         .wrap_load_out(wrap_load_memstage)
     );
 
+    assign rd_memstage = instruction_memstage[11:7];
     assign alu_out_address = alu_res_out_memstage;
     assign mask_singal = mask ;
     assign load_signal = load_memstage;
@@ -203,8 +206,9 @@ module core (
         .clk(clk),
         .mem_reg_in(mem_to_reg_memstage),
         .wrap_load_in(wrap_load_memstage),
-        .alu_res(alu_res_memstage),
+        .alu_res(alu_res_out_memstage),
         .next_sel_addr(next_sel_address_memstage),
+        .pre_address_in(pre_pc_addr_memstage),
         .instruction_in(instruction_memstage),
         .reg_write_in(reg_write_memstage),
         .reg_write_out(reg_write_wb),
@@ -212,6 +216,7 @@ module core (
         .mem_reg_out(mem_to_reg_wb),
         .next_sel_address(next_sel_address_wb),
         .instruction_out(instruction_wb),
+        .pre_address_out(pre_pc_addr_wb),
         .wrap_load_out(wrap_load_wb)
     );
 
@@ -220,7 +225,7 @@ module core (
         .mem_to_reg(mem_to_reg_wb),
         .alu_out(alu_res_out_wb),
         .data_mem_out(wrap_load_wb),
-        .next_sel_address(next_sel_address_memstage),
+        .next_sel_address(next_sel_address_wb),
         .rd_sel_mux_out(rd_wb_data)
     );
 endmodule

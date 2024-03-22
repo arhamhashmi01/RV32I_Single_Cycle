@@ -67,7 +67,8 @@ module controlunit (
         .operand_b(operand_b),
         .operand_a(operand_a),
         .imm_sel(imm_sel),
-        .alu_control(alu_control)
+        .alu_control(alu_control),
+        .load_control(load_control)
     );
 
 endmodule

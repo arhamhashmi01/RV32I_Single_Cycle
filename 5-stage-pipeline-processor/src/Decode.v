@@ -88,7 +88,7 @@ module decode (
     );
 
     assign rs1 = instruction[19:15];
-    assign rs2 = instruction[24:20]
+    assign rs2 = instruction[24:20];
     assign opb_data = op_b ;
 
     //SELECTION OF PROGRAM COUNTER OR OPERAND A
