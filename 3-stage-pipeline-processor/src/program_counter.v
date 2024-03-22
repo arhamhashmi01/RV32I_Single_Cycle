@@ -17,6 +17,7 @@ module pc (
     always @(posedge clk or negedge rst) begin
         if(!rst)begin
             address_out <= 0;
+            pre_address  <= address_out;
         end
 
         else begin
