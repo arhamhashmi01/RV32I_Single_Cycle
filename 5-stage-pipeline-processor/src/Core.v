@@ -21,7 +21,7 @@ module core (
     wire [31:0] instruc_data_out;
     wire [31:0] pre_address_pc;
     wire [31:0] instruction_fetch , instruction_decode , instruction_execute;
-    wire [31:0] instruction_memstage;
+    wire [31:0] instruction_memstage , instruction_wb;
     wire [31:0] pre_pc_addr_fetch , pre_pc_addr_decode , pre_pc_addr_execute;
     wire [31:0] pre_pc_addr_memstage;
     wire load_decode , load_execute , load_memstage;
@@ -33,13 +33,15 @@ module core (
     wire [3:0]  mask;
     wire [3:0]  alu_control_decode , alu_control_execute;
     wire [1:0]  mem_to_reg_decode , mem_to_reg_execute;
-    wire [1:0]  mem_to_reg_memstage;
+    wire [1:0]  mem_to_reg_memstage , mem_to_reg_wb;
     wire [31:0] op_b_decode , op_b_execute , op_b_memstage;
     wire [31:0] opa_mux_out_decode , opa_mux_out_execute;
     wire [31:0] opb_mux_out_decode , opb_mux_out_execute;
     wire [31:0] alu_res_out_execute , alu_res_out_memstage;
+    wire [31:0] alu_res_out_wb;
     wire [31:0] next_sel_address_execute , next_sel_address_memstage;
-    wire [31:0] wrap_load_out;
+    wire [31:0] next_sel_address_wb;
+    wire [31:0] wrap_load_memstage , wrap_load_wb;
     wire [31:0] rd_wb_data;
 
     //FETCH STAGE
@@ -81,7 +83,7 @@ module core (
         .rst(rst),
         .valid(data_mem_valid),
         .load_control_signal(load_execute),
-        .reg_write_en_in(reg_write_memstage),
+        .reg_write_en_in(reg_write_wb),
         .instruction(instruction_decode),
         .pc_address(pre_pc_addr_decode),
         .rd_wb_data(rd_wb_data),
@@ -93,7 +95,7 @@ module core (
         .mem_to_reg(mem_to_reg_decode),
         .branch_result(branch_result_decode),
         .opb_data(op_b_decode),
-        .instruction_rd(instruction_memstage),
+        .instruction_rd(instruction_wb),
         .alu_control(alu_control_decode),
         .opa_mux_out(opa_mux_out_decode),
         .opb_mux_out(opb_mux_out_decode)
@@ -178,19 +180,35 @@ module core (
         .we_re(data_mem_we_re),
         .request(data_mem_request),
         .store_data_out(store_data_out),
-        .wrap_load_out(wrap_load_out)
+        .wrap_load_out(wrap_load_memstage)
     );
 
     assign alu_out_address = alu_res_out_memstage;
     assign mask_singal = mask ;
     assign load_signal = load_memstage;
 
+    //MEMORY STAGE PIPELINE
+    memory_pipe u_memstagepipeline(
+        .clk(clk),
+        .mem_reg_in(mem_to_reg_memstage),
+        .wrap_load_in(wrap_load_memstage),
+        .alu_res(alu_res_memstage),
+        .next_sel_addr(next_sel_address_memstage),
+        .instruction_in(instruction_memstage),
+        .reg_write_in(reg_write_memstage),
+        .reg_write_out(reg_write_wb),
+        .alu_res_out(alu_res_out_wb),
+        .mem_reg_out(mem_to_reg_wb),
+        .next_sel_address(next_sel_address_wb),
+        .instruction_out(instruction_wb),
+        .wrap_load_out(wrap_load_wb)
+    );
 
     //WRITE BACK STAGE
     write_back u_wbstage(
-        .mem_to_reg(mem_to_reg_memstage),
-        .alu_out(alu_res_out_memstage),
-        .data_mem_out(wrap_load_out),
+        .mem_to_reg(mem_to_reg_wb),
+        .alu_out(alu_res_out_wb),
+        .data_mem_out(wrap_load_wb),
         .next_sel_address(next_sel_address_memstage),
         .rd_sel_mux_out(rd_wb_data)
     );
