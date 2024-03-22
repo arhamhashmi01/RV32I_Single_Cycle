@@ -13,6 +13,7 @@ module control_decoder (
 
     output reg Load,
     output reg Store,
+    output reg jalr_out,
     output reg [1:0] mem_to_reg,
     output reg reg_write,
     output reg mem_en,
@@ -38,7 +39,8 @@ always @(*) begin
     //branch
     Branch =  branch;
     //selection for next address if any jump instrucion run
-    next_sel = jal | jalr ;
+    next_sel = jal;
+    jalr_out = jalr;
     //mem enable
     mem_en = store;
 

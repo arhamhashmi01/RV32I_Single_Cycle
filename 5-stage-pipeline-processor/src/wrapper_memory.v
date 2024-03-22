@@ -4,6 +4,7 @@ module wrappermem (
     input wire [2:0] fun3,
     input wire mem_en,
     input wire Load,
+    input wire data_valid,
     input wire [31:0]wrap_load_in,
 
     output reg [3:0] masking,
@@ -59,7 +60,7 @@ module wrappermem (
             end
         end
 
-        if (Load)begin
+        if (Load | data_valid)begin
             if(fun3==3'b000)begin //lb
                 case (byteadd)
                     00: begin 

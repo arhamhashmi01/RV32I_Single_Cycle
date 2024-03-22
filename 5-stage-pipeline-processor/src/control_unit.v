@@ -3,6 +3,7 @@ module controlunit (
     input wire [2:0] fun3,
     input wire fun7,
     input wire valid,
+    input wire load_control,
 
     output wire reg_write,
     output wire [2:0]imm_sel,
@@ -10,6 +11,7 @@ module controlunit (
     output wire operand_a,
     output wire [1:0] mem_to_reg,
     output wire Load,
+    output wire jalr_out,
     output wire Store,
     output wire Branch,
     output wire mem_en,
@@ -38,7 +40,8 @@ module controlunit (
         .jal(jal),
         .jalr(jalr),
         .lui(lui),
-        .auipc(auipc)
+        .auipc(auipc),
+        .load_signal_controller(load_control)
     );
 
     control_decoder u_controldec0 (
@@ -57,6 +60,7 @@ module controlunit (
         .Branch(Branch),
         .Load(Load),
         .Store(Store),
+        .jalr_out(jalr_out),
         .mem_to_reg(mem_to_reg),
         .reg_write(reg_write),
         .mem_en(mem_en),

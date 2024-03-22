@@ -23,4 +23,5 @@ ${CORE_ROOT}/src/type_decoder.v
 ${CORE_ROOT}/src/wrapper_memory.v
 ${CORE_ROOT}/src/Write_back.v
 ${CORE_ROOT}/src/fetch_pipe.v
+${CORE_ROOT}/src/decode_pipe.v
 

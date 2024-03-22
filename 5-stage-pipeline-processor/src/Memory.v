@@ -3,6 +3,7 @@ module memory_stage (
     input wire load,
     input wire store,
     input wire valid,
+    input wire data_valid,
     input wire [31:0] op_b,
     input wire [31:0] alu_out_address,
     input wire [31:0] instruction,
@@ -24,12 +25,13 @@ module memory_stage (
         .Load(load),
         .wrap_load_in(wrap_load_in),
         .masking(mask),
+        .data_valid(data_valid),
         .data_o(store_data_out),
         .wrap_load_out(wrap_load_out)
     );
 
     always @ (*) begin
-        if (!valid) begin
+        if (!valid & !load) begin
             request = 0;
             we_re = 0;
         end
