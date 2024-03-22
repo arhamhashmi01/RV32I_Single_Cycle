@@ -17,6 +17,7 @@ module decode (
     output wire reg_write_en_out,
     output wire [3:0]  alu_control,
     output wire [1:0]  mem_to_reg,
+    output wire [4:0]  rs1 , rs2,
     output wire [31:0] opb_data,
     output wire [31:0] opa_mux_out,
     output wire [31:0] opb_mux_out
@@ -86,6 +87,8 @@ module decode (
         .op_b(op_b)
     );
 
+    assign rs1 = instruction[19:15];
+    assign rs2 = instruction[24:20]
     assign opb_data = op_b ;
 
     //SELECTION OF PROGRAM COUNTER OR OPERAND A

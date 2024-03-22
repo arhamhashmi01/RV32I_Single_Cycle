@@ -34,6 +34,8 @@ module core (
     wire [3:0]  alu_control_decode , alu_control_execute;
     wire [1:0]  mem_to_reg_decode , mem_to_reg_execute;
     wire [1:0]  mem_to_reg_memstage , mem_to_reg_wb;
+    wire [4:0]  rs1_decode , rs1_execute;
+    wire [4:0]  rs2_decode , rs2_execute;
     wire [31:0] op_b_decode , op_b_execute , op_b_memstage;
     wire [31:0] opa_mux_out_decode , opa_mux_out_execute;
     wire [31:0] opb_mux_out_decode , opb_mux_out_execute;
@@ -87,6 +89,8 @@ module core (
         .instruction(instruction_decode),
         .pc_address(pre_pc_addr_decode),
         .rd_wb_data(rd_wb_data),
+        .rs1(rs1_decode),
+        .rs2(rs2_decode),
         .load(load_decode),
         .store(store_decode),
         .jalr(jalr_decode),
@@ -117,6 +121,8 @@ module core (
         .pre_address_in(pre_pc_addr_decode),
         .instruction_in(instruction_decode),
         .reg_write_in(reg_write_decode),
+        .rs1_in(rs1_decode),
+        .rs2_in(rs2_decode),
         .reg_write_out(reg_write_execute),
         .jalr_out(jalr_execute),
         .load(load_execute),
@@ -129,13 +135,18 @@ module core (
         .opa_mux_out(opa_mux_out_execute),
         .opb_mux_out(opb_mux_out_execute),
         .pre_address_out(pre_pc_addr_execute),
-        .instruction_out(instruction_execute)
+        .instruction_out(instruction_execute),
+        .rs1_out(rs1_execute),
+        .rs2_out(rs2_execute)
     );
+
+    assign alu_in_a = (rs1_execute == rd_memstage)? alu_res_out_memstage : opa_mux_out_execute;
+    assign alu_in_b = (rs2_execute == rd_memstage)? alu_res_out_memstage : opb_mux_out_execute;
 
     //EXECUTE STAGE
     execute u_executestage(
-        .a_i(opa_mux_out_execute),
-        .b_i(opb_mux_out_execute),
+        .a_i(alu_in_a),
+        .b_i(alu_in_b),
         .pc_address(pre_pc_addr_execute),
         .alu_control(alu_control_execute),
         .alu_res_out(alu_res_out_execute),

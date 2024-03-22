@@ -37,6 +37,8 @@ module  decode_pipe(
   reg reg_write;
   reg [1:0] mem_reg;
   reg [3:0] alu_con;
+  reg [4:0] rs1;
+  reg [4:0] rs2;
   reg [31:0] opa_mux,opb_mux,opb_data,pre_address,instruction;
 
   always @ (posedge clk) begin
@@ -53,10 +55,14 @@ module  decode_pipe(
     pre_address <= pre_address_in;
     instruction <= instruction_in;
     reg_write <= reg_write_in;
+    rs1 <= rs1_in;
+    rs2 <= rs2_in;
   end
 
   assign load = l;
   assign store = s;
+  assign rs1_out = rs1;
+  assign rs2_out = rs2;
   assign jalr_out = jalr;
   assign next_sel = nextsel;
   assign reg_write_out = reg_write;
