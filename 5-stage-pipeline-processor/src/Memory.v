@@ -31,7 +31,7 @@ module memory_stage (
     );
 
     always @ (*) begin
-        if (!valid & !load) begin
+        if (!valid & !load & !store) begin
             request = 0;
             we_re = 0;
         end
