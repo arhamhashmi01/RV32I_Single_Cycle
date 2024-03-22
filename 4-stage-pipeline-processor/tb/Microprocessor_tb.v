@@ -21,8 +21,8 @@ module microprocessor_tb();
         #10;
 
         rst = 1;
-        #120;
-        #180;
+        #140;
+        #200;
 
         $finish;       
     end
