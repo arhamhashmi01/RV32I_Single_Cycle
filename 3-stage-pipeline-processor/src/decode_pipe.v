@@ -1,5 +1,6 @@
 module  decode_pipe(
   input wire clk,
+  input wire rst,
   input wire load_in,
   input wire store_in,
   input wire jalr_in,
@@ -39,7 +40,15 @@ module  decode_pipe(
   reg [3:0] alu_con;
   reg [31:0] opa_mux,opb_mux,opb_data,pre_address,instruction;
 
-  always @ (posedge clk) begin
+  always @ (posedge clk or negedge rst) begin
+    if (!rst) begin
+      pre_address <= 32'd0;
+      instruction <= 32'd0;
+    end
+    else begin
+      pre_address <= pre_address_in;
+      instruction <= instruction_in;
+    end
     l <= load_in;
     s <= store_in;
     jalr <= jalr_in;
@@ -50,8 +59,6 @@ module  decode_pipe(
     opa_mux <= opa_mux_in;
     opb_mux <= opb_mux_in;
     opb_data <= opb_data_in;
-    pre_address <= pre_address_in;
-    instruction <= instruction_in;
     reg_write <= reg_write_in;
   end
 

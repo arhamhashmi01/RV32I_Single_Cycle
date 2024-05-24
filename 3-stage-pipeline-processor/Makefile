@@ -1,4 +1,4 @@
-export CORE_ROOT=/home/arham/RV32I_Single_Cycle/3-stage-pipeline-processor
+export CORE_ROOT=/home/zeeshan/projects/RV32I_Single_Cycle/3-stage-pipeline-processor
 
 all: icarus
 

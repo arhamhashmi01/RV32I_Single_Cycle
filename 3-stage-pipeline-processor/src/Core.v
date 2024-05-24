@@ -62,6 +62,7 @@ module core (
     //FETCH STAGE PIPELINE
     fetch_pipe u_fetchpipeline(
         .clk(clk),
+        .rst(rst),
         .pre_address_pc(pre_pc_addr_fetch),
         .instruction_fetch(instruction_fetch),
         .pre_address_out(pre_pc_addr_decode),
@@ -99,6 +100,7 @@ module core (
     //DECODE STAGE PIPELINE
     decode_pipe u_decodepipeline(
         .clk(clk),
+        .rst(rst),
         .load_in(load_decode),
         .store_in(store_decode),
         .jalr_in(jalr_decode),
